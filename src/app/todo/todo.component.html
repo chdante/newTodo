@@ -1,0 +1,198 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <h1>Todo List</h1> 
+      <div class="row">
+        <div class="col-md-offset-10> col-md-3 checkbox pull-right">
+          <input type="checkbox" name="isMarkedUnDoneOnly" class="checkbox"
+            [(ngModel)] = "isMarkedUnDoneOnly" 
+            (click) = "displayTodos(isMarkedUnDoneOnly);">
+            <label>Display Undone Todos only</label>
+        </div>
+      </div>   
+      <br/>
+      <table class="table table-bordered table-striped table-hover">
+        <thead>
+          <tr>
+              <th class="text-center">ID</th>
+              <th>Todo</th>
+              <th>Done?</th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th class="text-center">&nbsp;</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let todo of sortedTodos;">
+            <td>{{todo.id}}</td>
+            <td>{{todo.name}}</td>
+            <td *ngIf="todo.isDone ; else notDone">
+              <label class="label label-primary">Done</label>  
+            </td>            
+            <ng-template #notDone >
+              <td>
+                <label class="label label-default">Not yet done</label>
+              </td>
+            </ng-template>
+
+            <td>
+              <button class="btn btn-info"
+                (click)="updateTodoDone(todo,true);">
+                Mark Done
+              </button>
+            </td> 
+
+            <td>
+              <button class="btn  btn-warning"
+                (click)="updateTodoDone(todo,false);">
+                Mark Not yet Done
+              </button>
+            </td>
+            <td>              
+              <button class="btn btn-info"
+                (click)="moveTodoUp(todo);">
+                <i class="fa fa-arrow-up" aria-hidden="true"></i>
+              </button>
+            </td>
+
+            <td>              
+                <button class="btn btn-info"
+                  (click)="moveTodoDown(todo);">
+                  <i class="fa fa-arrow-down" aria-hidden="true"></i>
+                </button>
+            </td>
+  
+            <td >
+              <button class="btn btn-info"
+                (click)="showEditTodoForm(todo);" >
+                <i class="fa fa-edit"></i>
+              </button>
+
+              <button class="btn btn-danger"
+                (click)="deleteTodo(todo,isMarkedUnDoneOnly);" >
+                <i class="fa fa-minus"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<br/>
+<br/>
+
+
+<div class="form-group">
+  <div class="row">
+  <div class="col-md-2"></div>
+  <div class="col-md-4">
+    <button class="btn btn-primary"(click)="showAddTodoForm();" >Create New Todo</button>          
+  </div>
+  <div class="col-md-6"></div>
+  </div>
+</div>    
+
+<form *ngIf="isEditTodoForm">
+
+  <div class="row">
+    <div class="col-md-2">      
+    </div>
+    <div class="col-md-10">
+      <h2>Edit Todo</h2>
+    </div>
+  </div>
+
+  <div class="form-group">
+      <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-1" >
+          <span class="control-label" >
+            <label>Todo:</label>          
+          </span>      
+        </div>
+        <div class="col-md-5">
+          <input type="text" class="form-control" name="name" [(ngModel)]="editedTodo.name" >
+        </div>  
+        <div class="col-md-4"></div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col-md-5">
+          <input type="checkbox" name="isDone" [(ngModel)] = "newTodo.isDone" class="checkbox"  value="Done?">
+          <label>Is it done?</label>
+        </div>
+        <div class="col-md-4"></div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
+          <button class="btn btn-primary"(click)="updateTodo(editedTodo,isMarkedUnDoneOnly)" >Submit</button>  
+
+        </div>
+        <div class="col-md-4"></div>
+      </div>
+    </div>    
+    
+
+</form>
+
+
+<form *ngIf="isNewTodoForm">
+    
+      <div class="row">
+        <div class="col-md-2">      
+        </div>
+        <div class="col-md-10">
+          <h2>New Todo</h2>
+        </div>
+      </div>    
+    
+      <div class="form-group">
+          <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-1">
+              <span class= "control-label" >
+                <label>Todo:</label>          
+              </span>      
+            </div>
+            <div class="col-md-5">
+              <input type="text" class="form-control" name="name" [(ngModel)]="newTodo.name" >
+            </div>  
+            <div class="col-md-4"></div>
+          </div>
+        </div>
+
+        <div class="form-group">
+            <div class="row">
+              <div class="col-md-offset-3 col-md-5">
+                <input type="checkbox" name="isDone" [(ngModel)] = "newTodo.isDone" class="checkbox"  value="Done?">                         
+                <label>Is it Done?</label>          
+              </div>
+              <div class="col-md-4"></div>
+            </div>
+          </div>
+    
+        <div class="form-group">
+          <div class="row">
+            <div class="col-md-3"></div>
+            <div class="col-md-5">
+              <button class="btn btn-primary"(click)="saveNewTodo(newTodo,isMarkedUnDoneOnly)" >Submit</button>  
+    
+            </div>
+            <div class="col-md-4"></div>
+          </div>
+        </div>    
+
+    </form>
+      
+  
